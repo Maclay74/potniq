@@ -1,10 +1,10 @@
 services:
-  node:
-    build: ./docker/node
-    container_name: Node
+  potniq:
+    build: ./docker/bun
+    container_name: Potniq
 
     volumes:
-      - ./src:/app
+      - ./src:/usr/src/app
 
     environment:
       - NODE_ENV=development
@@ -12,9 +12,14 @@ services:
   example:
     build: ./docker/node
     container_name: Example
+    platform: linux/x86_64
 
     volumes:
       - ./example:/app
+      - ./src/:/app/potniq
+
+    ports:
+      - 3000:3000
 
     environment:
       - NODE_ENV=development
