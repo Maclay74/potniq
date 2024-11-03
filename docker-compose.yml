@@ -8,3 +8,13 @@ services:
 
     environment:
       - NODE_ENV=development
+
+  example:
+    build: ./docker/node
+    container_name: Example
+
+    volumes:
+      - ./example:/app
+
+    environment:
+      - NODE_ENV=development
