@@ -1,0 +1,10 @@
+services:
+  node:
+    build: ./docker/node
+    container_name: Node
+
+    volumes:
+      - ./src:/app
+
+    environment:
+      - NODE_ENV=development
