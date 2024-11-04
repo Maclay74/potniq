@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist && echo 'Done.'",
-    "dev": "bun  --watch index.ts",
-    "build": "bun build ./index.ts --target=bun-linux-x64-baseline --compile --outfile ./dist/potniq --minify"
+    "dev": "bun --watch index.ts",
+    "build": "bun build ./index.ts --compile --outfile ./dist/potniq --minify"
   },
   "bin": {
     "potniq": "./dist/potniq"
