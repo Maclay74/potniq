@@ -1,23 +1,31 @@
 {
   "name": "potniq",
   "module": "index.ts",
+  "version": "0.0.1",
   "type": "module",
+  "files": ["dist/index.d.ts", "dist/potniq"],
   "scripts": {
     "clean": "rm -rf dist && echo 'Done.'",
     "dev": "bun --watch index.ts",
-    "build": "bun build ./index.ts --compile --outfile ./dist/potniq --minify"
+    "build": "bun build ./index.ts --compile --outfile ./dist/potniq --minify && bun build-types",
+    "build-types": "bun ./build-types.ts",
+    "pack": "bun run build && bun pm pack"
   },
+  "types": "./dist/index.d.ts",
   "bin": {
     "potniq": "./dist/potniq"
   },
   "devDependencies": {
     "@types/bun": "^1.1.13",
+    "bun-plugin-isolated-decl": "^0.1.6",
+    "oxc-transform": "^0.35.0",
     "prettier": "^3.3.3"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
     "path-parser": "^6.1.0"
   }
 }

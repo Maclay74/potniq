@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/node": "^22.8.7",
     "jose": "^5.9.6",
-    "potniq": "link:/app/potniq"
+    "potniq": "file:potniq/potniq-0.0.1.tgz"
   },
   "devDependencies": {
     "typescript": "~5.6.2"

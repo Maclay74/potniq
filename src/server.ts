@@ -4,7 +4,6 @@ import { router } from "./utils/router.ts";
 const authorize = await getAuthMethod();
 
 export const server = () => {
-
   Bun.serve({
     async fetch(req, server) {
       const authResult = await authorize(req);
