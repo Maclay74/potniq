@@ -3,15 +3,15 @@
   "module": "index.ts",
   "version": "0.0.1",
   "type": "module",
-  "files": ["dist/index.d.ts", "dist/potniq"],
+  "files": ["dist", "types"],
   "scripts": {
     "clean": "rm -rf dist && echo 'Done.'",
     "dev": "bun --watch index.ts",
     "build": "bun build ./index.ts --compile --outfile ./dist/potniq --minify && bun build-types",
-    "build-types": "bun ./build-types.ts",
+    "build-types": "bun tsc --project tsconfig.types.json",
     "pack": "bun run build && bun pm pack"
   },
-  "types": "./dist/index.d.ts",
+  "types": "types/index.d.ts",
   "bin": {
     "potniq": "./dist/potniq"
   },

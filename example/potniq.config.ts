@@ -1,5 +1,7 @@
 import { PotniqConfig } from "potniq";
 
-export default {
-  port: 3000,
-} as PotniqConfig;
+const config: PotniqConfig = {
+  port: 3000
+}
+
+export default config;

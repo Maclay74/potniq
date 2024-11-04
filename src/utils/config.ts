@@ -1,16 +1,18 @@
 import { sep as DirectorySeparator } from "node:path";
 import { access } from "node:fs/promises";
-import chalk from 'chalk';
+import chalk from "chalk";
 
-export type PotniqConfig = {
+type BasePotniqConfig = {
   port: number;
+  host: `${number}.${number}.${number}.${number}`;
 };
 
-const defaultConfig: PotniqConfig = {
+export type PotniqConfig = Partial<BasePotniqConfig>;
+
+const defaultConfig: BasePotniqConfig = {
   port: 3000,
+  host: "0.0.0.0",
 };
-
-type ConfigModule = { default: PotniqConfig };
 
 export const getConfig = async () => {
   const path = process.cwd() + DirectorySeparator + "potniq.config.ts";
@@ -22,10 +24,12 @@ export const getConfig = async () => {
     if (!configModule) {
       return defaultConfig;
     }
-    return configModule;
+    return { ...defaultConfig, ...configModule };
   } catch (e) {
-    console.log(chalk.yellow("⚠️ Couldn't load ") + chalk.underline.bold.yellow("potniq.config.ts"));
+    console.log(
+      chalk.yellow("⚠️ Couldn't load ") +
+        chalk.underline.bold.yellow("potniq.config.ts"),
+    );
     return defaultConfig;
   }
-
 };

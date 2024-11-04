@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,              // Emit declaration files
+    "emitDeclarationOnly": true,  // Only emit .d.ts files
+    "declaration": true,           // Generate .d.ts files
+    "declarationDir": "./types"    // Output directory for the .d.ts files
+  },
+  "include": ["index.ts"]          // Include your source files
+}
