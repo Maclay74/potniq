@@ -1,4 +1,4 @@
-# sockets-framework
+# Potniq
 
 To install dependencies:
 
