@@ -1,6 +1,6 @@
 import { sep as DirectorySeparator, join } from "node:path";
 import { Path } from "path-parser";
-import type { ServerWebSocket } from "bun";
+import type { ServerWebSocket, Server } from "bun";
 import { readdir } from "node:fs/promises";
 import * as url from "node:url";
 
@@ -18,6 +18,8 @@ interface TopicModule {
   onUnsubscribe: (client: object, data: object, params: object) => void;
 }
 
+export interface Client<T> {}
+
 const topics = new Bun.Glob("**/topic.ts");
 
 const routes = new Map<Path, string>();
@@ -27,9 +29,10 @@ const templates: Record<string, string> = {
 };
 
 export const router = async (
-  ws: ServerWebSocket,
+  server: Server,
+  ws: ServerWebSocket<unknown>,
   message: string | Buffer,
-): Promise<void> => {
+) => {
   // Non-authorized can't send messages
   if (!ws.data) return;
 
@@ -46,12 +49,23 @@ export const router = async (
 
   switch (action) {
     case "subscribe":
-      module.onSubscribe(ws.data, data, handler.params);
+      if (!ws.isSubscribed(path)) {
+        ws.subscribe(path);
+        module.onSubscribe(ws.data, data, handler.params);
+      } else {
+        ws.sendText("Already subscribed to " + path);
+      }
       break;
     case "unsubscribe":
-      module.onUnsubscribe(ws.data, data, handler.params);
+      if (ws.isSubscribed(path)) {
+        ws.unsubscribe(path);
+        module.onUnsubscribe(ws.data, data, handler.params);
+      } else {
+        ws.sendText("Not subscribed to " + path);
+      }
       break;
     case "message":
+      server.publish(path, JSON.stringify(data));
       module.onMessage(ws.data, data, handler.params);
       break;
   }
@@ -90,9 +104,17 @@ try {
     const topicFolder = topicPath.replace(/\/topic.ts$/, "");
     const urlPath = pathToPattern(topicFolder);
 
-    routes.set(urlPath, join(process.cwd(), DirectorySeparator, "app", DirectorySeparator, topicPath));
+    routes.set(
+      urlPath,
+      join(
+        process.cwd(),
+        DirectorySeparator,
+        "app",
+        DirectorySeparator,
+        topicPath,
+      ),
+    );
   }
 } catch (e) {
   console.warn("\x1b[33m%s\x1b[0m", "⚠️ Can't parse application's routes");
 }
-
